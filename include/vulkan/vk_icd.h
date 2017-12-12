@@ -85,6 +85,9 @@ typedef enum {
     VK_ICD_WSI_PLATFORM_WIN32,
     VK_ICD_WSI_PLATFORM_XCB,
     VK_ICD_WSI_PLATFORM_XLIB,
+    VK_ICD_WSI_PLATFORM_ANDROID,
+    VK_ICD_WSI_PLATFORM_MACOS,
+    VK_ICD_WSI_PLATFORM_IOS,
     VK_ICD_WSI_PLATFORM_DISPLAY
 } VkIcdWsiPlatform;
 
@@ -134,9 +137,24 @@ typedef struct {
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
 typedef struct {
+    VkIcdSurfaceBase base;
     ANativeWindow* window;
 } VkIcdSurfaceAndroid;
 #endif //VK_USE_PLATFORM_ANDROID_KHR
+
+#ifdef VK_USE_PLATFORM_MACOS_MVK
+typedef struct {
+    VkIcdSurfaceBase base;
+    const void *pView;
+} VkIcdSurfaceMacOS;
+#endif //VK_USE_PLATFORM_MACOS_MVK
+
+#ifdef VK_USE_PLATFORM_IOS_MVK
+typedef struct {
+    VkIcdSurfaceBase base;
+    const void *pView;
+} VkIcdSurfaceIOS;
+#endif //VK_USE_PLATFORM_IOS_MVK
 
 typedef struct {
     VkIcdSurfaceBase base;

@@ -90,8 +90,8 @@ static inline void test_error_callback(const char *expr, const char *file, unsig
     ADD_FAILURE_AT(file, line) << "Assertion: `" << expr << "'";
 }
 
-#if defined(__linux__)
-    /* Linux-specific common code: */
+#if defined(__linux__) || defined(__APPLE__)
+/* Linux-specific common code: */
 
 #include <pthread.h>
 
