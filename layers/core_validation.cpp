@@ -2637,6 +2637,35 @@ static bool ValidateFenceForSubmit(layer_data *dev_data, FENCE_NODE *pFence) {
     return skip;
 }
 
+static bool validateImageAcquireAndSync(layer_data *dev_data, GLOBAL_CB_NODE *pCB,
+                                        unordered_set<VkSemaphore> const &unsignaled_semaphores) {
+    bool skip = false;
+    // Check that swapchain presentable images (not front buffered) were acquired and synchronized.
+    for (auto cb_image_data : pCB->imageLayoutMap) {
+        auto image_data = GetImageState(dev_data, cb_image_data.first.image);
+        if (image_data && (image_data->binding.mem == MEMTRACKER_SWAP_CHAIN_IMAGE_KEY) && !image_data->shared_presentable) {
+            if (!image_data->acquired) {
+                skip |= log_msg(
+                    dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
+                    HandleToUint64(pCB->commandBuffer), __LINE__, DRAWSTATE_SWAPCHAIN_IMAGE_NOT_ACQUIRED, "DS",
+                    "vkQueueSubmit: Swapchain image (0x%" PRIx64 ") has not been acquired.", HandleToUint64(image_data->image));
+            }
+            // If a fence was specified when the image was acquired, assume that it is being used for synchronization.
+            // Else, check if the right semaphore is being used.
+            if (image_data->fence == VK_NULL_HANDLE) {
+                if (unsignaled_semaphores.find(image_data->semaphore) == unsignaled_semaphores.end()) {
+                    skip |= log_msg(
+                        dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
+                        HandleToUint64(pCB->commandBuffer), __LINE__, DRAWSTATE_SWAPCHAIN_IMAGE_NOT_ACQUIRED, "DS",
+                        "vkQueueSubmit: Submit not waiting on Swapchain image's (0x%" PRIx64 ") semaphore (0x%" PRIx64 ").",
+                        HandleToUint64(image_data->image), HandleToUint64(image_data->semaphore));
+                }
+            }
+        }
+    }
+    return skip;
+}
+
 static void PostCallRecordQueueSubmit(layer_data *dev_data, VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits,
                                       VkFence fence) {
     uint64_t early_retire_seq = 0;
@@ -2805,6 +2834,7 @@ static bool PreCallValidateQueueSubmit(layer_data *dev_data, VkQueue queue, uint
                 skip |= validatePrimaryCommandBufferState(
                     dev_data, cb_node, (int)std::count(current_cmds.begin(), current_cmds.end(), submit->pCommandBuffers[i]));
                 skip |= validateQueueFamilyIndices(dev_data, cb_node, queue);
+                skip |= validateImageAcquireAndSync(dev_data, cb_node, unsignaled_semaphores);
 
                 // Potential early exit here as bad object state may crash in delayed function calls
                 if (skip) {
@@ -10165,6 +10195,8 @@ static void PostCallRecordAcquireNextImageKHR(layer_data *dev_data, VkDevice dev
     auto image_state = GetImageState(dev_data, image);
     image_state->acquired = true;
     image_state->shared_presentable = swapchain_data->shared_presentable;
+    image_state->semaphore = semaphore;
+    image_state->fence = fence;
 }
 
 VKAPI_ATTR VkResult VKAPI_CALL AcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout,

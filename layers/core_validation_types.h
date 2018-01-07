@@ -244,12 +244,21 @@ class IMAGE_STATE : public BINDABLE {
    public:
     VkImage image;
     VkImageCreateInfo createInfo;
+    VkSemaphore semaphore;
+    VkFence fence;
     bool valid;     // If this is a swapchain image backing memory track valid here as it doesn't have DEVICE_MEM_INFO
     bool acquired;  // If this is a swapchain image, has it been acquired by the app.
     bool shared_presentable;  // True for a front-buffered swapchain image
     bool layout_locked;       // A front-buffered image that has been presented can never have layout transitioned
     IMAGE_STATE(VkImage img, const VkImageCreateInfo *pCreateInfo)
-        : image(img), createInfo(*pCreateInfo), valid(false), acquired(false), shared_presentable(false), layout_locked(false) {
+        : image(img),
+          createInfo(*pCreateInfo),
+          semaphore(VK_NULL_HANDLE),
+          fence(VK_NULL_HANDLE),
+          valid(false),
+          acquired(false),
+          shared_presentable(false),
+          layout_locked(false) {
         if ((createInfo.sharingMode == VK_SHARING_MODE_CONCURRENT) && (createInfo.queueFamilyIndexCount > 0)) {
             uint32_t *pQueueFamilyIndices = new uint32_t[createInfo.queueFamilyIndexCount];
             for (uint32_t i = 0; i < createInfo.queueFamilyIndexCount; i++) {
