@@ -13136,7 +13136,7 @@ TEST_F(VkLayerTest, NumSamplesMismatch) {
     m_errorMonitor->VerifyFound();
 }
 
-TEST_F(VkLayerTest, RenderPassIncompatible) {
+TEST_F(VkLayerTest, RenderPassIncompatible2) {
     TEST_DESCRIPTION(
         "Hit RenderPass incompatible cases. "
         "Initial case is drawing with an active renderpass that's "
