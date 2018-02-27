@@ -26,6 +26,7 @@ endif()
 
 if(APPLE)
     # CMake versions 3 or later need CMAKE_MACOSX_RPATH defined.
+    # This avoids the CMP0042 policy message.
     set(CMAKE_MACOSX_RPATH 1)
     # The "install" target for MacOS fixes up bundles in place.
     set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
@@ -151,7 +152,6 @@ option(BUILD_LAYERS "Build layers" ON)
 option(BUILD_DEMOS "Build demos" ON)
 if (APPLE)
     option(BUILD_VKJSON "Build vkjson" OFF)
-    option(BUILD_FRAMEWORK "Build MacOS Framework" OFF)
 else()
     option(BUILD_VKJSON "Build vkjson" ON)
 endif()

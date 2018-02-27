@@ -1164,19 +1164,19 @@ void Demo::init_vk() {
                  "Please look at the Getting Started guide for additional information.\n",
                  "vkCreateInstance Failure");
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
-        ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find the "
-                    VK_MVK_IOS_SURFACE_EXTENSION_NAME" extension.\n\nDo you have a compatible "
-                    "Vulkan installable client driver (ICD) installed?\nPlease "
-                    "look at the Getting Started guide for additional "
-                    "information.\n",
-                    "vkCreateInstance Failure");
+        ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find the " VK_MVK_IOS_SURFACE_EXTENSION_NAME
+                 " extension.\n\nDo you have a compatible "
+                 "Vulkan installable client driver (ICD) installed?\nPlease "
+                 "look at the Getting Started guide for additional "
+                 "information.\n",
+                 "vkCreateInstance Failure");
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
-        ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find the "
-                    VK_MVK_MACOS_SURFACE_EXTENSION_NAME" extension.\n\nDo you have a compatible "
-                    "Vulkan installable client driver (ICD) installed?\nPlease "
-                    "look at the Getting Started guide for additional "
-                    "information.\n",
-                    "vkCreateInstance Failure");
+        ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find the " VK_MVK_MACOS_SURFACE_EXTENSION_NAME
+                 " extension.\n\nDo you have a compatible "
+                 "Vulkan installable client driver (ICD) installed?\nPlease "
+                 "look at the Getting Started guide for additional "
+                 "information.\n",
+                 "vkCreateInstance Failure");
 #endif
     }
     auto const app = vk::ApplicationInfo()
@@ -2301,9 +2301,8 @@ void Demo::update_data_buffer() {
 }
 
 bool Demo::loadTexture(const char *filename, uint8_t *rgba_data, vk::SubresourceLayout *layout, int32_t *width, int32_t *height) {
-
 #if (defined(VK_USE_PLATFORM_IOS_MVK) || defined(VK_USE_PLATFORM_MACOS_MVK))
-    filename =[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: @(filename)].UTF8String;
+    filename = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@(filename)].UTF8String;
 #endif
 
     FILE *fPtr = fopen(filename, "rb");
@@ -2974,11 +2973,11 @@ int main(int argc, char **argv) {
 #elif defined(VK_USE_PLATFORM_IOS_MVK) || defined(VK_USE_PLATFORM_MACOS_MVK)
 
 // Global function invoked from NS or UI views and controllers to create demo
-static void demo_main(struct Demo &demo, void* view) {
-    const char* argv[] = { "CubeSample" };
-    int argc = sizeof(argv) / sizeof(char*);
+static void demo_main(struct Demo &demo, void *view) {
+    const char *argv[] = {"CubeSample"};
+    int argc = sizeof(argv) / sizeof(char *);
 
-    demo.init(argc, (char**)argv);
+    demo.init(argc, (char **)argv);
     demo.window = view;
     demo.init_vk_swapchain();
     demo.prepare();

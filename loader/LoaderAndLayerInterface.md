@@ -46,7 +46,6 @@
 ## Overview
 
 Vulkan is a layered architecture, made up of the following elements:
-
   * The Vulkan Application
   * [The Vulkan Loader](#the-loader)
   * [Vulkan Layers](#layers)
@@ -88,8 +87,7 @@ between each of these.
 
 ##### Goals of the Loader
 
-The loader was designed with the following goals in mind:
-
+The loader was designed with the following goals in mind.
  1. Support one or more Vulkan-capable ICD on a user's computer system without
 them interfering with one another.
  2. Support Vulkan Layers which are optional modules that can be enabled by an
@@ -104,13 +102,12 @@ Layers are optional components that augment the Vulkan system.  They can
 intercept, evaluate, and modify existing Vulkan functions on their way from the
 application down to the hardware.  Layers are implemented as libraries that can
 be enabled in different ways (including by application request) and are loaded
-during `CreateInstance`.  Each layer can choose to hook (intercept) any Vulkan
+during CreateInstance.  Each layer can choose to hook (intercept) any Vulkan
 functions which in turn can be ignored or augmented.  A layer does not need to
 intercept all Vulkan functions.  It may choose to intercept all known functions,
 or, it may choose to intercept only one function.
 
 Some examples of features that layers may expose include:
-
  * Validating API usage
  * Adding the ability to perform Vulkan API tracing and debugging
  * Overlay additional content on the applications surfaces
@@ -135,7 +132,6 @@ the application.
 There is an important concept which you will see brought up repeatedly
 throughout this document.  Many functions, extensions, and other things in
 Vulkan are separated into two main groups:
-
  * Instance-related Objects
  * Device-related Objects
 
@@ -145,14 +141,12 @@ Vulkan are separated into two main groups:
 A Vulkan Instance is a high-level construct used to provide Vulkan system-level
 information, or functionality.  Vulkan objects associated directly with an
 instance are:
-
  * `VkInstance`
  * `VkPhysicalDevice`
 
 An Instance function is any Vulkan function which takes as its first parameter
-either an object from the Instance list, or nothing at all. Some Vulkan
+either an object from the Instance list, or nothing at all.  Some Vulkan
 Instance functions are:
-
  * `vkEnumerateInstanceExtensionProperties`
  * `vkEnumeratePhysicalDevices`
  * `vkCreateInstance`
@@ -173,7 +167,6 @@ the Vulkan language.  These will be discussed in more detail later.
 A Vulkan Device, on the other-hand, is a logical identifier used to associate
 functions with a particular physical device on a user's system.  Vulkan
 constructs associated directly with a device include:
-
  * `VkDevice`
  * `VkQueue`
  * `VkCommandBuffer`
@@ -181,7 +174,6 @@ constructs associated directly with a device include:
 
 A Device function is any Vulkan function which takes any Device Object as its
 first parameter.  Some Vulkan Device functions are:
-
  * `vkQueueSubmit`
  * `vkBeginCommandBuffer`
  * `vkCreateEvent`
@@ -219,7 +211,6 @@ the loader.  This dispatch table contains pointers to the Vulkan functions
 appropriate to that object.
 
 There are two types of dispatch tables the loader maintains:
-
  - Instance Dispatch Table
   - Created in the loader during the call to `vkCreateInstance`
  - Device Dispatch Table
@@ -276,7 +267,6 @@ because they deal with only a single device and the ICD can always be the
 
 In this section we'll discuss how an application interacts with the loader,
 including:
-
   * [Interfacing with Vulkan Functions](#interfacing-with-vulkan-functions)
     * [Vulkan Direct Exports](#vulkan-direct-exports)
     * [Directly Linking to the Loader](#directly-linking-to-the-loader)
@@ -402,7 +392,6 @@ convert the KHR_surface object into an ICD-specific KHR_surface object prior to
 passing down the rest of the function's information to the ICD.
 
 Remember:
-
  * `vkGetInstanceProcAddr` can be used to query
 either device or instance entry-points in addition to all core entry-points.
  * `vkGetDeviceProcAddr` can only be used to query for device
@@ -465,7 +454,7 @@ the case.  See the [Overall Layer Ordering](#overall-layer-ordering) section
 for more information.
 
 The following code section shows how you would go about enabling the
-`VK_LAYER_LUNARG_standard_validation` layer.
+VK_LAYER_LUNARG_standard_validation layer.
 
 ```
    char *instance_validation_layers[] = {
@@ -507,7 +496,6 @@ section for more information on layer ordering.
 > Therefore, `vkCreateDevice` will use the layers specified at
 `vkCreateInstance`.
 > Because of this, the following items have been deprecated:
-> 
 > * `VkDeviceCreateInfo` fields:
 >  * `ppEnabledLayerNames`
 >  * `enabledLayerCount`
@@ -517,7 +505,7 @@ section for more information on layer ordering.
 ##### Implicit vs Explicit Layers
 
 Explicit layers are layers which are enabled by an application (e.g. with the
-`vkCreateInstance` function), or by an environment variable (as mentioned
+vkCreateInstance function), or by an environment variable (as mentioned
 previously).
 
 Implicit layers are those which are enabled by their existence. For example,
@@ -551,7 +539,7 @@ system, as shown in the table below.
 
 Developers may need to use special, pre-production layers, without modifying the
 system-installed layers. You can direct the loader to look for layers in a
-specific folder by defining the `VK_LAYER_PATH` environment variable.  This
+specific folder by defining the "VK\_LAYER\_PATH" environment variable.  This
 will override the mechanism used for finding system-installed layers. Because
 layers of interest may exist in several disinct folders on a system, this
 environment variable can containis several paths seperated by the operating
@@ -559,7 +547,7 @@ specific path separator.  On Windows, each separate folder should be separated
 in the list using a semi-colon.  On Linux, each folder name should be separated
 using a colon.
 
-If `VK_LAYER_PATH` exists, **only** the folders listed in it will be scanned
+If "VK\_LAYER\_PATH" exists, **only** the folders listed in it will be scanned
 for layers.  Each directory listed should be the full pathname of a folder
 containing layer manifest files.
 
@@ -568,9 +556,9 @@ containing layer manifest files.
 
 Developers may want to enable layers that are not enabled by the given
 application they are using. On Linux and Windows, the environment variable
-`VK_INSTANCE_LAYERS` can be used to enable additional layers which are
+"VK\_INSTANCE\_LAYERS" can be used to enable additional layers which are
 not specified (enabled) by the application at `vkCreateInstance`.
-`VK_INSTANCE_LAYERS` is a colon (Linux)/semi-colon (Windows) separated
+"VK\_INSTANCE\_LAYERS" is a colon (Linux)/semi-colon (Windows) separated
 list of layer names to enable. Order is relevant with the first layer in the
 list being the top-most layer (closest to the application) and the last
 layer in the list being the bottom-most layer (closest to the driver).
@@ -586,7 +574,7 @@ An example of using these environment variables to activate the validation
 layer `VK_LAYER_LUNARG_parameter_validation` on Windows or Linux is as follows:
 
 ```
-export VK_INSTANCE_LAYERS=VK_LAYER_LUNARG_parameter_validation
+> $ export VK_INSTANCE_LAYERS=VK_LAYER_LUNARG_parameter_validation
 ```
 
 
@@ -599,12 +587,12 @@ as follows:
 
 Ordering may also be important internal to the list of Explicit Layers.
 Some layers may be dependent on other behavior being implemented before
-or after the loader calls it.  For example: the `VK_LAYER_LUNARG_core_validation`
-layer expects the `VK_LAYER_LUNARG_parameter_validation` to be called first.
-This is because the `VK_LAYER_LUNARG_parameter_validation` will filter out any
+or after the loader calls it.  For example: the VK_LAYER_LUNARG_core_validation
+layer expects the VK_LAYER_LUNARG_parameter_validation to be called first.
+This is because the VK_LAYER_LUNARG_parameter_validation will filter out any
 invalid `NULL` pointer calls prior to the rest of the validation checking
-done by `VK_LAYER_LUNARG_core_validation`.  If not done properly, you may see
-crashes in the `VK_LAYER_LUNARG_core_validation` layer that would otherwise be
+done by VK_LAYER_LUNARG_core_validation.  If not done properly, you may see
+crashes in the VK_LAYER_LUNARG_core_validation layer that would otherwise be
 avoided.
 
 
@@ -623,7 +611,6 @@ found in the Vulkan Spec, and vulkan.h header file.
 
 As hinted at in the [Instance Versus Device](#instance-versus-device) section,
 there are really two types of extensions:
-
  * Instance Extensions
  * Device Extensions
 
@@ -641,7 +628,6 @@ The loader discovers and aggregates all
 extensions from layers (both explicit and implicit), ICDs and the loader before
 reporting them to the application in `vkEnumerateXXXExtensionProperties`
 (where XXX is either "Instance" or "Device").
-
  - Instance extensions are discovered via
 `vkEnumerateInstanceExtensionProperties`.
  - Device extensions are be discovered via
@@ -657,10 +643,10 @@ Looking at `vulkan.h`, you'll notice that they are both similar.  For example,
                                           VkExtensionProperties *pProperties);
 ```
 
-The `pLayerName` parameter in these functions is used to select either a single
-layer or the Vulkan platform implementation. If `pLayerName` is NULL, extensions
+The "pLayerName" parameter in these functions is used to select either a single
+layer or the Vulkan platform implementation. If "pLayerName" is NULL, extensions
 from Vulkan implementation components (including loader, implicit layers, and
-ICDs) are enumerated. If `pLayerName` is equal to a discovered layer module name
+ICDs) are enumerated. If "pLayerName" is equal to a discovered layer module name
 then only extensions from that layer (which may be implicit or explicit) are
 enumerated. Duplicate extensions (e.g. an implicit layer and ICD might report
 support for the same extension) are eliminated by the loader. For duplicates,
@@ -706,7 +692,6 @@ completely implemented at this time.
 It is important to understand that while the loader may support the various
 entry-points for these extensions, there is a hand-shake required to actually
 use them:
-
 * At least one physical device must support the extension(s)
 * The application must select such a physical device
 * The application must request the extension(s) be enabled while creating the
@@ -728,7 +713,7 @@ component.  However, for all other instance extensions the loader will fail to
 load it.
 
 *But why doesn't the loader support unknown instance extensions?*
-
+<br/>
 Let's look again at the Instance call chain:
 
 ![Instance call chain](./images/loader_instance_chain.png)
@@ -747,7 +732,7 @@ since a physical device is associated with one ICD, we can use a generic
 terminate directly in the ICD they are associated with.
 
 *Is this a big problem?*
-
+<br/>
 No!  Most extension functionality only affects either a physical or logical
 device and not an instance.  Thus, the overwhelming majority of extensions
 should be supported with direct loader support.
@@ -766,11 +751,12 @@ the filtering by defining the environment variable `VK_LOADER_DISABLE_INST_EXT_F
 and setting the value to a non-zero number.  This will effectively disable the
 loader's filtering out of instance extension names.
 
+<br/>
+<br/>
 
 ## Loader and Layer Interface
 
 In this section we'll discuss how the loader interacts with layers, including:
-
   * [Layer Discovery](#layer-discovery)
     * [Layer Manifest File Usage](#layer-manifest-file-usage)
     * [Android Layer Discovery](#android-layer-discovery)
@@ -806,7 +792,6 @@ In this section we'll discuss how the loader interacts with layers, including:
 As mentioned in the
 [Application Interface section](#implicit-vs-explicit-layers),
 layers can be categorized into two categories:
-
  * Implicit Layers
  * Explicit Layers
 
@@ -935,17 +920,17 @@ directories:
     $HOME/.local/share/vulkan/implicit_layer.d
 
 Of course, ther are some things you have to know about the above folders:
- 1. The `/usr/local/` directories can be configured to be other directories at
+ 1. The "/usr/local/*" directories can be configured to be other directories at
 build time.
- 2. `$HOME` is the current home directory of the application's user id; this path
+ 2. $HOME is the current home directory of the application's user id; this path
 will be ignored for suid programs.
- 3. The `/usr/local/etc/vulkan/\*\_layer.d` and
-`/usr/local/share/vulkan/\*\_layer.d` directories are for layers that are
+ 3. The "/usr/local/etc/vulkan/\*\_layer.d" and
+"/usr/local/share/vulkan/\*\_layer.d" directories are for layers that are
 installed from locally-built sources.
- 4. The `/usr/share/vulkan/\*\_layer.d` directories are for layers that are
+ 4. The "/usr/share/vulkan/\*\_layer.d" directories are for layers that are
 installed from Linux-distribution-provided packages.
 
-As on Windows, if `VK_LAYER_PATH` is defined, then the
+As on Windows, if VK\_LAYER\_PATH is defined, then the
 loader will instead look at the paths defined by that variable instead of using
 the information provided by these default paths.  However, these
 environment variables are only used for non-suid programs.  See
@@ -982,64 +967,61 @@ provided for this interface in include/vulkan/vk_layer.h:
 ```
 
 You'll notice the `VkNegotiateLayerInterface` structure is similar to other
-Vulkan structures.  The `sType` field, in this case takes a new enum defined
-just for internal loader/layer interfacing use.  The valid values for `sType`
+Vulkan structures.  The "sType" field, in this case takes a new enum defined
+just for internal loader/layer interfacing use.  The valid values for "sType"
 could grow in the future, but right only havs the one value
-`LAYER_NEGOTIATE_INTERFACE_STRUCT`.
+"LAYER_NEGOTIATE_INTERFACE_STRUCT".
 
 This function (`vkNegotiateLoaderLayerInterfaceVersion`) should be exported by
 the layer so that using "GetProcAddress" on Windows or "dlsym" on Linux, should
 return a valid function pointer to it.  Once the loader has grabbed a valid
 address to the layers function, the loader will create a variable of type
 `VkNegotiateLayerInterface` and initialize it in the following ways:
-
- 1. Set the structure `sType` to `LAYER_NEGOTIATE_INTERFACE_STRUCT`
- 2. Set pNext to `NULL`.
+ 1. Set the structure "sType" to "LAYER_NEGOTIATE_INTERFACE_STRUCT"
+ 2. Set pNext to NULL.
      - This is for future growth
- 3. Set `loaderLayerInterfaceVersion` to the current version the loader desires
+ 3. Set "loaderLayerInterfaceVersion" to the current version the loader desires
 to set the interface to.
       - The minimum value sent by the loader will be 2 since it is the first
 version supporting this function.
 
 The loader will then individually call each layer’s
 `vkNegotiateLoaderLayerInterfaceVersion` function with the filled out
-`VkNegotiateLayerInterface`. The layer will either accept the loader's version
-set in `loaderLayerInterfaceVersion`, or modify it to the closest value version
+“VkNegotiateLayerInterface”. The layer will either accept the loader's version
+set in "loaderLayerInterfaceVersion", or modify it to the closest value version
 of the interface that the layer can support.  The value should not be higher
 than the version requested by the loader.  If the layer can't support at a
 minimum the version requested, then the layer should return an error like
-`VK_ERROR_INITIALIZATION_FAILED`.  If a layer can support some version, then
+"VK_ERROR_INITIALIZATION_FAILED".  If a layer can support some version, then
 the layer should do the following:
-
  1. Adjust the version to the layer's desired version.
  2. The layer should fill in the function pointer values to its internal
 functions:
-    - `pfnGetInstanceProcAddr` should be set to the layer’s internal
+    - "pfnGetInstanceProcAddr" should be set to the layer’s internal
 `GetInstanceProcAddr` function.
-    - `pfnGetDeviceProcAddr` should be set to the layer’s internal
+    - "pfnGetDeviceProcAddr" should be set to the layer’s internal
 `GetDeviceProcAddr` function.
-    - `pfnGetPhysicalDeviceProcAddr` should be set to the layer’s internal
+    - "pfnGetPhysicalDeviceProcAddr" should be set to the layer’s internal
 `GetPhysicalDeviceProcAddr` function.
       - If the layer supports no physical device extensions, it may set the
 value to NULL.
       - More on this function later
- 3. The layer should return `VK_SUCCESS`
+ 3. The layer should return "VK_SUCCESS"
 
 This function **SHOULD NOT CALL DOWN** the layer chain to the next layer.
 The loader will work with each layer individually.
 
 If the layer supports the new interface and reports version 2 or greater, then
-the loader will use the `fpGetInstanceProcAddr` and `fpGetDeviceProcAddr`
-functions from the `VkNegotiateLayerInterface` structure.  Prior to these
-changes, the loader would query each of those functions using `GetProcAddress`
-on Windows or `dlsym` on Linux.
+the loader will use the “fpGetInstanceProcAddr” and “fpGetDeviceProcAddr”
+functions from the “VkNegotiateLayerInterface” structure.  Prior to these
+changes, the loader would query each of those functions using "GetProcAddress"
+on Windows or "dlsym" on Linux.
 
 
 #### Layer Call Chains and Distributed Dispatch
 
 There are two key architectural features that drive the loader to layer library
 interface:
-
  1. Separate and distinct instance and device call chains
  2. Distributed dispatch.
 
@@ -1082,7 +1064,6 @@ functions to the first entity in the call chain.
 
 Originally, if the loader was called with `vkGetInstanceProcAddr`, it would
 result in the following behavior:
-
  1. The loader would check if core function:
     - If it was, it would return the function pointer
  2. The loader would check if known extension function:
@@ -1117,7 +1098,6 @@ extension entry-points.  In this way, it compares "pName" to every physical
 device function supported in the layer.
 
 The following rules apply:
-
   * If it is the name of a physical device function supported by the layer, the
 pointer to the layer's corresponding function should be returned.
   * If it is the name of a valid function which is **not** a physical device
@@ -1152,7 +1132,6 @@ pointer to a query of `vk_layerGetPhysicalDeviceProcAddr`.
 
 The new behavior of the loader's `vkGetInstanceProcAddr` with support for the
 `vk_layerGetPhysicalDeviceProcAddr` function is as follows:
-
  1. Check if core function:
     - If it is, return the function pointer
  2. Check if known instance or device extension function:
@@ -1161,12 +1140,12 @@ The new behavior of the loader's `vkGetInstanceProcAddr` with support for the
     - If it returns non-NULL, return a trampoline to a generic physical device
 function, and setup a generic terminator which will pass it to the proper ICD.
  4. Call down using `GetInstanceProcAddr`
-    - If it returns non-`NULL`, treat it as an unknown logical device command.
+    - If it returns non-NULL, treat it as an unknown logical device command.
 This means setting up a generic trampoline function that takes in a VkDevice as
 the first parameter and adjusting the dispatch table to call the ICD/Layers
 function after getting the dispatch table from the VkDevice. Then, return the
 pointer to corresponding trampoline function.
- 5. Return `NULL`
+ 5. Return NULL
 
 You can see now, that, if the command gets promoted to core later, it will no
 longer be setup using `vk_layerGetPhysicalDeviceProcAddr`.  Additionally, if the
@@ -1261,7 +1240,6 @@ always enabled.  That will allow applications to include the layer's memory
 usage.
 
 Additional rules include:
-
   - `vkEnumerateInstanceLayerProperties` **must** enumerate and **only**
 enumerate the layer itself.
   - `vkEnumerateInstanceExtensionProperties` **must** handle the case where
@@ -1302,18 +1280,18 @@ function.
 - A layer initializes its device dispatch table within its `vkCreateDevice`
 function.
 - The loader passes a linked list of initialization structures to layers via
-the `pNext` field in the `VkInstanceCreateInfo` and `VkDeviceCreateInfo`
+the "pNext" field in the `VkInstanceCreateInfo` and `VkDeviceCreateInfo`
 structures for `vkCreateInstance` and `VkCreateDevice` respectively.
 - The head node in this linked list is of type `VkLayerInstanceCreateInfo` for
-instance and `VkLayerDeviceCreateInfo` for device. See file
+instance and VkLayerDeviceCreateInfo for device. See file
 `include/vulkan/vk_layer.h` for details.
-- A `VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO` is used by the loader for the
+- A VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO is used by the loader for the
 "sType" field in `VkLayerInstanceCreateInfo`.
-- A `VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO` is used by the loader for the
-`sType` field in `VkLayerDeviceCreateInfo`.
+- A VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO is used by the loader for the
+"sType" field in `VkLayerDeviceCreateInfo`.
 - The "function" field indicates how the union field "u" should be interpreted
 within `VkLayer*CreateInfo`. The loader will set the "function" field to
-`VK_LAYER_LINK_INFO`. This indicates "u" field should be `VkLayerInstanceLink` or
+VK_LAYER_LINK_INFO. This indicates "u" field should be `VkLayerInstanceLink` or
 `VkLayerDeviceLink`.
 - The `VkLayerInstanceLink` and `VkLayerDeviceLink` structures are the list
 nodes.
@@ -1325,25 +1303,17 @@ used by a layer.
 dispatch table as follows:
   - Find the `VkLayerInstanceCreateInfo`/`VkLayerDeviceCreateInfo` structure in
 the `VkInstanceCreateInfo`/`VkDeviceCreateInfo` structure.
-  - Get the next entity's `vkGet*ProcAddr` from the `pLayerInfo` field.
-  - For `CreateInstance` get the next entity's `vkCreateInstance` by calling the
-`pfnNextGetInstanceProcAddr`:
-
-		```
-	     pfnNextGetInstanceProcAddr(NULL, "vkCreateInstance").
-		```
-
+  - Get the next entity's vkGet*ProcAddr from the "pLayerInfo" field.
+  - For CreateInstance get the next entity's `vkCreateInstance` by calling the
+"pfnNextGetInstanceProcAddr":
+     pfnNextGetInstanceProcAddr(NULL, "vkCreateInstance").
   - For CreateDevice get the next entity's `vkCreateDevice` by calling the
-`pfnNextGetInstanceProcAddr`:
-
-		```
-	   	pfnNextGetInstanceProcAddr(NULL, "vkCreateDevice").
-		```
-	     
+"pfnNextGetInstanceProcAddr":
+     pfnNextGetInstanceProcAddr(NULL, "vkCreateDevice").
   - Advanced the linked list to the next node: pLayerInfo = pLayerInfo->pNext.
   - Call down the chain either `vkCreateDevice` or `vkCreateInstance`
   - Initialize your layer dispatch table by calling the next entity's
-`Get*ProcAddr` function once for each Vulkan function needed in your dispatch
+Get*ProcAddr function once for each Vulkan function needed in your dispatch
 table
 
 #### Example Code for CreateInstance
@@ -1571,7 +1541,7 @@ A layer may want to associate it's own private data with one or more Vulkan
 objects.  Two common methods to do this are hash maps and object wrapping. 
 
 
-##### Wrapping
+###### Wrapping
 
 The loader supports layers wrapping any Vulkan object, including dispatchable
 objects.  For functions that return object handles, each layer does not touch
@@ -1632,7 +1602,7 @@ unsupported extensions, alerting the user to the potential for undefined
 behavior.
 
 
-##### Hash Maps
+###### Hash Maps
 
 Alternatively, a layer may want to use a hash map to associate data with a
 given object. The key to the map could be the object. Alternatively, for
@@ -1651,7 +1621,6 @@ loader *trampoline* code normally fills in the dispatch table pointer in the
 newly created object. Thus, the layer must fill in the dispatch table pointer if
 the loader *trampoline* will not do so.  Common cases where a layer (or ICD) may
 create a dispatchable object without loader *trampoline* code is as follows:
-
 - layers that wrap dispatchable objects
 - layers which add extensions that create dispatchable objects
 - layers which insert extra Vulkan functions in the stream of functions they
@@ -1673,26 +1642,25 @@ VKAPI_ATTR VkResult VKAPI_CALL vkSetDeviceLoaderData(VkDevice device,
 ```
 
 To obtain these callbacks the layer must search through the list of structures
-pointed to by the `pNext` field in the `VkInstanceCreateInfo` and
+pointed to by the "pNext" field in the `VkInstanceCreateInfo` and
 `VkDeviceCreateInfo` parameters to find any callback structures inserted by the
 loader. The salient details are as follows:
-
 - For `VkInstanceCreateInfo` the callback structure pointed to by "pNext" is
 `VkLayerInstanceCreateInfo` as defined in `include/vulkan/vk_layer.h`.
-- A `sType` field in of `VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO` within
+- A "sType" field in of VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO within
 `VkInstanceCreateInfo` parameter indicates a loader structure.
 - Within `VkLayerInstanceCreateInfo`, the "function" field indicates how the
 union field "u" should be interpreted.
-- A "function" equal to `VK_LOADER_DATA_CALLBACK` indicates the "u" field will
+- A "function" equal to VK_LOADER_DATA_CALLBACK indicates the "u" field will
 contain the callback in "pfnSetInstanceLoaderData".
-- For `VkDeviceCreateInfo` the callback structure pointed to by `pNext` is
+- For `VkDeviceCreateInfo` the callback structure pointed to by "pNext" is
 `VkLayerDeviceCreateInfo` as defined in `include/vulkan/vk_layer.h`.
-- A `sType` field in of `VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO` within
+- A "sType" field in of VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO within
 `VkDeviceCreateInfo` parameter indicates a loader structure.
 - Within `VkLayerDeviceCreateInfo`, the "function" field indicates how the union
 field "u" should be interpreted.
-- A "function" equal to `VK_LOADER_DATA_CALLBACK` indicates the "u" field will
-contain the callback in `pfnSetDeviceLoaderData`.
+- A "function" equal to VK_LOADER_DATA_CALLBACK indicates the "u" field will
+contain the callback in "pfnSetDeviceLoaderData".
 
 Alternatively, if an older loader is being used that doesn't provide these
 callbacks, the layer may manually initialize the newly created dispatchable
@@ -1764,7 +1732,6 @@ Here is an example layer JSON Manifest file with a single layer:
 
 Here's a snippet with the changes required to support multiple layers per
 manifest file:
-
 ```
 {
    "file_format_version" : "1.0.1",
@@ -1784,7 +1751,6 @@ manifest file:
 ```
 
 Here's an example of a meta-layer manifest file:
-
 ```
 {
    "file_format_version" : "1.1.1",
@@ -1843,16 +1809,15 @@ To support metalayers, the "component_layers" section was added, and the require
 
 Layer Manifest File Version 1.1.0 is tied to changes exposed by the Loader/Layer
 interface version 2.
-
-  1. Renaming `vkGetInstanceProcAddr` in the "functions" section is
+  1. Renaming "vkGetInstanceProcAddr" in the "functions" section is
      deprecated since the loader no longer needs to query the layer about
-     `vkGetInstanceProcAddr` directly.  It is now returned during the layer
+     "vkGetInstanceProcAddr" directly.  It is now returned during the layer
      negotiation, so this field will be ignored.
-  2. Renaming `vkGetDeviceProcAddr` in the "functions" section is
+  2. Renaming "vkGetDeviceProcAddr" in the "functions" section is
      deprecated since the loader no longer needs to query the layer about
-     `vkGetDeviceProcAddr` directly.  It too is now returned during the layer
+     "vkGetDeviceProcAddr" directly.  It too is now returned during the layer
      negotiation, so this field will be ignored.
-  3. Renaming the `vkNegotiateLoaderLayerInterfaceVersion` function is
+  3. Renaming the "vkNegotiateLoaderLayerInterfaceVersion" function is
      being added to the "functions" section, since this is now the only
      function the loader needs to query using OS-specific calls.
       - NOTE: This is an optional field and, as the two previous fields, only
@@ -1871,7 +1836,6 @@ The "layer" field is still present and valid for a single layer definition.
 
 The initial version of the layer manifest file specified the basic format and
 fields of a layer JSON file.  The fields of the 1.0.0 file format include:
-
  * "file\_format\_version"
  * "layer"
  * "name"
@@ -2174,15 +2138,15 @@ pre-production ICD may simply be a shared library in the developer's build tree.
 In this latter case, we want to allow developers to point to such an ICD without
 modifying the system-installed ICD(s) on their system.
 
-This need is met with the use of the `VK_ICD_FILENAMES` environment variable,
+This need is met with the use of the "VK\_ICD\_FILENAMES" environment variable,
 which will override the mechanism used for finding system-installed ICDs. In
-other words, only the ICDs listed in `VK_ICD_FILENAMES` will be used.
+other words, only the ICDs listed in "VK\_ICD\_FILENAMES" will be used.
 
-The `VK_ICD_FILENAMES` environment variable is a list of ICD
+The "VK\_ICD\_FILENAMES" environment variable is a list of ICD
 manifest files, containing the full path to the ICD JSON Manifest file.  This
 list is colon-separated on Linux, and semi-colon separated on Windows.
 
-Typically, `VK_ICD_FILENAMES` will only contain a full pathname to one info
+Typically, "VK\_ICD\_FILENAMES" will only contain a full pathname to one info
 file for a developer-built ICD. A separator (colon or semi-colon) is only used
 if more than one ICD is listed.
 
@@ -2235,7 +2199,6 @@ version 1.0.0.
 
 The initial version of the ICD Manifest file specified the basic format and
 fields of a layer JSON file.  The fields of the 1.0.0 file format include:
-
  * "file\_format\_version"
  * "ICD"
  * "library\_path"
@@ -2274,7 +2237,6 @@ using these newly defined dispatchable objects must be queryable via
 `vk_icdGetInstanceProcAddr`.
 
 All other Vulkan entry-points must either:
-
  * NOT be exported directly from the ICD library
  * or NOT use the official Vulkan function names if they are exported
  
@@ -2308,8 +2270,8 @@ This caused problems when an ICD attempted to expose new physical device
 extensions the loader knew nothing about, but an application did.  Because the
 loader knew nothing about it, the loader would get to step 3 in the above
 process and would treat the function as an unknown logical device command.  The
-problem is, this would create a generic `VkDevice` trampoline function which, on
-the first call, would attempt to dereference the `VkPhysicalDevice` as a `VkDevice`.
+problem is, this would create a generic VkDevice trampoline function which, on
+the first call, would attempt to dereference the VkPhysicalDevice as a VkDevice.
 This would lead to a crash or corruption.
 
 In order to identify the extension entry-points specific to physical device
@@ -2326,7 +2288,6 @@ extension entry-points.  In this way, it compares "pName" to every physical
 device function supported in the ICD.
 
 The following rules apply:
-
 * If it is the name of a physical device function supported by the ICD, the
 pointer to the ICD's corresponding function should be returned.
 * If it is the name of a valid function which is **not** a physical device
@@ -2341,9 +2302,8 @@ does implement this support, it should return the address of its
 `vk_icdGetPhysicalDeviceProcAddr` function through the `vkGetInstanceProcAddr`
 function.
 
-The new behavior of the loader's `vkGetInstanceProcAddr` with support for the
+The new behavior of the loader's vkGetInstanceProcAddr with support for the
 `vk_icdGetPhysicalDeviceProcAddr` function is as follows:
-
  1. Check if core function:
     - If it is, return the function pointer
  2. Check if known instance or device extension function:
@@ -2352,11 +2312,11 @@ The new behavior of the loader's `vkGetInstanceProcAddr` with support for the
     - If it returns non-NULL, return a trampoline to a generic physical device
 function, and setup a generic terminator which will pass it to the proper ICD.
  4. Call down using `GetInstanceProcAddr`
-    - If it returns non-NULL, treat it as an unknown logical device command. 
-      This means setting up a generic trampoline function that takes in a `VkDevice` as
-      the first parameter and adjusting the dispatch table to call the ICD/Layers
-      function after getting the dispatch table from the VkDevice. Then, return the
-      pointer to corresponding trampoline function.
+    - If it returns non-NULL, treat it as an unknown logical device command.
+This means setting up a generic trampoline function that takes in a VkDevice as
+the first parameter and adjusting the dispatch table to call the ICD/Layers
+function after getting the dispatch table from the VkDevice. Then, return the
+pointer to corresponding trampoline function.
  5. Return NULL
 
 You can see now, that, if the command gets promoted to core later, it will no
@@ -2414,13 +2374,12 @@ vkObj alloc_icd_obj()
 
 Normally, ICDs handle object creation and destruction for various Vulkan
 objects. The WSI surface extensions for Linux and Windows
-(`VK_KHR_win32_surface`, `VK_KHR_xcb_surface`, `VK_KHR_xlib_surface`,
-`VK_KHR_mir_surface`, `VK_KHR_wayland_surface`, and `VK_KHR_surface`)
+("VK\_KHR\_win32\_surface", "VK\_KHR\_xcb\_surface", "VK\_KHR\_xlib\_surface",
+"VK\_KHR\_mir\_surface", "VK\_KHR\_wayland\_surface", and "VK\_KHR\_surface")
 are handled differently.  For these extensions, the `VkSurfaceKHR` object
 creation and destruction may be handled by either the loader, or an ICD.
 
 If the loader handles the management of the `VkSurfaceKHR` objects:
-
  1. The loader will handle the calls to `vkCreateXXXSurfaceKHR` and
 `vkDestroySurfaceKHR`
     functions without involving the ICDs.
@@ -2442,11 +2401,9 @@ If the loader handles the management of the `VkSurfaceKHR` objects:
 
 The ICD may choose to handle `VkSurfaceKHR` object creation instead.  If an ICD
 desires to handle creating and destroying it must do the following:
-
  1. Support version 3 or newer of the loader/ICD interface.
  2. Export and handle all functions that take in a `VkSurfaceKHR` object,
 including:
-
      * `vkCreateXXXSurfaceKHR`
      * `vkGetPhysicalDeviceSurfaceSupportKHR`
      * `vkGetPhysicalDeviceSurfaceCapabilitiesKHR`
@@ -2497,8 +2454,8 @@ interface between the loader and ICDs.
 ```
 
 This function allows the loader and ICD to agree on an interface version to use.
-The `pSupportedVersion` parameter is both an input and output parameter.
-`pSupportedVersion` is filled in by the loader with the desired latest interface
+The "pSupportedVersion" parameter is both an input and output parameter.
+"pSupportedVersion" is filled in by the loader with the desired latest interface
 version supported by the loader (typically the latest). The ICD receives this
 and returns back the version it desires in the same field.  Because it is
 setting up the interface version between the loader and ICD, this should be
@@ -2507,21 +2464,21 @@ the first call made by a loader to the ICD (even prior to any calls to
 
 If the ICD receiving the call no longer supports the interface version provided
 by the loader (due to deprecation), then it should report
-`VK_ERROR_INCOMPATIBLE_DRIVER` error.  Otherwise it sets the value pointed by
-`pSupportedVersion` to the latest interface version supported by both the ICD
-and the loader and returns `VK_SUCCESS`.
+VK_ERROR_INCOMPATIBLE_DRIVER error.  Otherwise it sets the value pointed by
+"pSupportedVersion" to the latest interface version supported by both the ICD
+and the loader and returns VK_SUCCESS.
 
-The ICD should report `VK_SUCCESS` in case the loader provided interface version
+The ICD should report VK_SUCCESS in case the loader provided interface version
 is newer than that supported by the ICD, as it's the loader's responsibility to
 determine whether it can support the older interface version supported by the
-ICD.  The ICD should also report `VK_SUCCESS` in the case its interface version
+ICD.  The ICD should also report VK_SUCCESS in the case its interface version
 is greater than the loader's, but return the loader's version. Thus, upon
-return of `VK_SUCCESS` the `pSupportedVersion` will contain the desired interface
+return of VK_SUCCESS the "pSupportedVersion" will contain the desired interface
 version to be used by the ICD.
 
 If the loader receives an interface version from the ICD that the loader no
 longer supports (due to deprecation), or it receives a
-`VK_ERROR_INCOMPATIBLE_DRIVER` error instead of `VK_SUCCESS`, then the loader will
+VK_ERROR_INCOMPATIBLE_DRIVER error instead of VK_SUCCESS, then the loader will
 treat the ICD as incompatible and will not load it for use.  In this case, the
 application will not see the ICDs `vkPhysicalDevice` during enumeration.
 
@@ -2545,22 +2502,22 @@ Version 5 of the loader/ICD interface has no changes to the actual interface.
 If the loader requests interface version 5 or greater, it is simply
 an indication to ICDs that the loader is now evaluating if the API Version info
 passed into vkCreateInstance is a valid version for the loader.  If it is not,
-the loader will catch this during `vkCreateInstance` and fail with a
-`VK_ERROR_INCOMPATIBLE_DRIVER` error.
+the loader will catch this during vkCreateInstance and fail with a
+VK_ERROR_INCOMPATIBLE_DRIVER error.
 
 On the other hand, if version 5 or newer is not requested by the loader, then it
 indicates to the ICD that the loader is ignorant of the API version being
 requested.  Because of this, it falls on the ICD to validate that the API
 Version is not greater than major = 1 and minor = 0.  If it is, then the ICD
-should automatically fail with a `VK_ERROR_INCOMPATIBLE_DRIVER` error since the
+should automatically fail with a VK_ERROR_INCOMPATIBLE_DRIVER error since the
 loader is a 1.0 loader, and is unaware of the version.
 
 Here is a table of the expected behaviors:
 
 | Loader Supports I/f Version  |  ICD Supports I/f Version  |    Result        |
 | :---: |:---:|------------------------|
-|           <= 4               |           <= 4             | ICD must fail with `VK_ERROR_INCOMPATIBLE_DRIVER` for all `vkCreateInstance` calls with apiVersion set to > Vulkan 1.0 because both the loader and ICD support interface version <= 4. Otherwise, the ICD should behave as normal. |
-|           <= 4               |           >= 5             | ICD must fail with `VK_ERROR_INCOMPATIBLE_DRIVER` for all `vkCreateInstance` calls with apiVersion set to > Vulkan 1.0 because the loader is still at interface version <= 4. Otherwise, the ICD should behave as normal.  |
+|           <= 4               |           <= 4             | ICD must fail with `VK_ERROR_INCOMPATIBLE_DRIVER` for all vkCreateInstance calls with apiVersion set to > Vulkan 1.0 because both the loader and ICD support interface version <= 4. Otherwise, the ICD should behave as normal. |
+|           <= 4               |           >= 5             | ICD must fail with `VK_ERROR_INCOMPATIBLE_DRIVER` for all vkCreateInstance calls with apiVersion set to > Vulkan 1.0 because the loader is still at interface version <= 4. Otherwise, the ICD should behave as normal.  |
 |           >= 5               |           <= 4             | Loader will fail with `VK_ERROR_INCOMPATIBLE_DRIVER` if it can't handle the apiVersion.  ICD may pass for all apiVersions, but since it's interface is <= 4, it is best if it assumes it needs to do the work of rejecting anything > Vulkan 1.0 and fail with `VK_ERROR_INCOMPATIBLE_DRIVER`. Otherwise, the ICD should behave as normal.  |
 |           >= 5               |           >= 5             | Loader will fail with `VK_ERROR_INCOMPATIBLE_DRIVER` if it can't handle the apiVersion, and ICDs should fail with `VK_ERROR_INCOMPATIBLE_DRIVER` **only if** they can not support the specified apiVersion. Otherwise, the ICD should behave as normal.  |
 
@@ -2584,7 +2541,6 @@ However, some ICDs may want to provide their own surface handles.  If an ICD
 chooses to enable this support, it must export support for version 3 of the
 loader/ICD interface, as well as any Vulkan function that uses a KHR_surface
 handle, such as:
-
 - `vkCreateXXXSurfaceKHR` (where XXX is the platform specific identifier [i.e.
 `vkCreateWin32SurfaceKHR` for Windows])
 - `vkDestroySurfaceKHR`
@@ -2602,7 +2558,6 @@ functions.
 ##### Loader Version 2 Interface Requirements
 
 Version 2 interface has requirements in three areas:
-
  1. ICD Vulkan entry-point discovery,
  2. `KHR_surface` related requirements in the WSI extensions,
  3. Vulkan dispatchable object creation requirements.

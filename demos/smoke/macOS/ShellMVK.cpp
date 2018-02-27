@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Brenwill Workshop Ltd.
+ * Copyright (C) 2016-2018 The Brenwill Workshop Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -29,21 +29,16 @@
 #include "Helpers.h"
 #include "Game.h"
 
-PosixTimer::PosixTimer()
-{
+PosixTimer::PosixTimer() {
     _tsBase = mach_absolute_time();
     mach_timebase_info_data_t timebase;
     mach_timebase_info(&timebase);
     _tsPeriod = (double)timebase.numer / (double)timebase.denom;
 }
 
-double PosixTimer::get()
-{
-    return (double)(mach_absolute_time() - _tsBase) * _tsPeriod / 1e9;
-}
+double PosixTimer::get() { return (double)(mach_absolute_time() - _tsBase) * _tsPeriod / 1e9; }
 
-ShellMVK::ShellMVK(Game& game) : Shell(game)
-{
+ShellMVK::ShellMVK(Game& game) : Shell(game) {
     _timer = PosixTimer();
     _current_time = _timer.get();
     _profile_start_time = _current_time;
@@ -59,17 +54,15 @@ ShellMVK::ShellMVK(Game& game) : Shell(game)
     init_vk();
 }
 
-ShellMVK::~ShellMVK()
-{
+ShellMVK::~ShellMVK() {
     destroy_context();
     cleanup_vk();
 }
 
-PFN_vkGetInstanceProcAddr ShellMVK::load_vk()
-{
+PFN_vkGetInstanceProcAddr ShellMVK::load_vk() {
     const char filename[] = "libvulkan.1.dylib";
-    void *handle = NULL;
-    void *symbol = NULL;
+    void* handle = NULL;
+    void* symbol = NULL;
 
 #ifdef UNINSTALLED_LOADER
     // Try to load the loader from the defined location.
@@ -78,7 +71,7 @@ PFN_vkGetInstanceProcAddr ShellMVK::load_vk()
     // If still no loader, try in the bundle executable directory.
     if (!handle) {
         unsigned int bufferSize = 512;
-        std::vector<char> buffer(bufferSize+1);
+        std::vector<char> buffer(bufferSize + 1);
         if (_NSGetExecutablePath(&buffer[0], &bufferSize)) {
             buffer.resize(bufferSize);
             _NSGetExecutablePath(&buffer[0], &bufferSize);
@@ -96,19 +89,16 @@ PFN_vkGetInstanceProcAddr ShellMVK::load_vk()
     if (!handle || !symbol) {
         std::stringstream ss;
         ss << "failed to load " << dlerror();
-        
+
         if (handle) dlclose(handle);
-        
+
         throw std::runtime_error(ss.str());
     }
 
     return reinterpret_cast<PFN_vkGetInstanceProcAddr>(symbol);
 }
 
-bool ShellMVK::can_present(VkPhysicalDevice phy, uint32_t queue_family)
-{
-    return true;
-}
+bool ShellMVK::can_present(VkPhysicalDevice phy, uint32_t queue_family) { return true; }
 
 VkSurfaceKHR ShellMVK::create_surface(VkInstance instance) {
     VkSurfaceKHR surface;
@@ -136,7 +126,6 @@ VkSurfaceKHR ShellMVK::create_surface(VkInstance instance) {
 }
 
 void ShellMVK::update_and_draw() {
-
     acquire_back_buffer();
 
     double t = _timer.get();
@@ -150,9 +139,8 @@ void ShellMVK::update_and_draw() {
     if (_current_time - _profile_start_time >= 5.0) {
         const double fps = _profile_present_count / (_current_time - _profile_start_time);
         std::stringstream ss;
-        ss << _profile_present_count << " presents in " <<
-        _current_time - _profile_start_time << " seconds " <<
-        "(FPS: " << fps << ")";
+        ss << _profile_present_count << " presents in " << _current_time - _profile_start_time << " seconds "
+           << "(FPS: " << fps << ")";
         log(LOG_INFO, ss.str().c_str());
 
         _profile_start_time = _current_time;
@@ -161,7 +149,7 @@ void ShellMVK::update_and_draw() {
 }
 
 void ShellMVK::run(void* view) {
-    _view = view;       // not retained
+    _view = view;  // not retained
     create_context();
     resize_swapchain(settings_.initial_width, settings_.initial_height);
 }

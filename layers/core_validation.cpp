@@ -12037,10 +12037,10 @@ static const std::unordered_map<std::string, void *> name_to_funcptr_map = {
     {"vkGetPhysicalDeviceXlibPresentationSupportKHR", (void *)GetPhysicalDeviceXlibPresentationSupportKHR},
 #endif
 #ifdef VK_USE_PLATFORM_IOS_MVK
-    {"vkCreateIOSSurfaceMVK", (void*)CreateIOSSurfaceMVK},
+    {"vkCreateIOSSurfaceMVK", (void *)CreateIOSSurfaceMVK},
 #endif
 #ifdef VK_USE_PLATFORM_MACOS_MVK
-    {"vkCreateMacOSSurfaceMVK", (void*)CreateMacOSSurfaceMVK},
+    {"vkCreateMacOSSurfaceMVK", (void *)CreateMacOSSurfaceMVK},
 #endif
     {"vkCreateDisplayPlaneSurfaceKHR", (void *)CreateDisplayPlaneSurfaceKHR},
     {"vkDestroySurfaceKHR", (void *)DestroySurfaceKHR},

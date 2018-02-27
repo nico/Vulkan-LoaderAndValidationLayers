@@ -396,8 +396,7 @@ LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkCreateSwapchainKHR(VkDevice devic
 }
 
 VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo,
-                                                             const VkAllocationCallbacks *pAllocator,
-                                                             VkSwapchainKHR *pSwapchain) {
+                                                             const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain) {
     uint32_t icd_index = 0;
     struct loader_device *dev;
     struct loader_icd_term *icd_term = loader_get_icd_and_device(device, &dev, &icd_index);
@@ -1111,10 +1110,8 @@ LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK(VkInstance 
 }
 
 // This is the instance chain terminator function for CreateMacOSSurfaceKHR
-VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateMacOSSurfaceMVK(VkInstance instance,
-                                                                const VkMacOSSurfaceCreateInfoMVK *pCreateInfo,
-                                                                const VkAllocationCallbacks *pAllocator,
-                                                                VkSurfaceKHR *pSurface) {
+VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateMacOSSurfaceMVK(VkInstance instance, const VkMacOSSurfaceCreateInfoMVK *pCreateInfo,
+                                                                const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
     VkResult vkRes = VK_SUCCESS;
     VkIcdSurface *pIcdSurface = NULL;
     uint32_t i = 0;
@@ -1191,10 +1188,8 @@ LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkCreateIOSSurfaceMVK(VkInstance in
 }
 
 // This is the instance chain terminator function for CreateIOSSurfaceKHR
-VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateIOSSurfaceMVK(VkInstance instance,
-                                                              const VkIOSSurfaceCreateInfoMVK *pCreateInfo,
-                                                              const VkAllocationCallbacks *pAllocator,
-                                                              VkSurfaceKHR *pSurface) {
+VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateIOSSurfaceMVK(VkInstance instance, const VkIOSSurfaceCreateInfoMVK *pCreateInfo,
+                                                              const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
     // First, check to ensure the appropriate extension was enabled:
     struct loader_instance *ptr_instance = loader_get_instance(instance);
     if (!ptr_instance->wsi_ios_surface_enabled) {
@@ -1205,7 +1200,7 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateIOSSurfaceMVK(VkInstance instanc
 
     // Next, if so, proceed with the implementation of this function:
     VkIcdSurfaceIOS *pIcdSurface =
-    loader_instance_heap_alloc(ptr_instance, sizeof(VkIcdSurfaceIOS), VK_SYSTEM_ALLOCATION_SCOPE_OBJECT);
+        loader_instance_heap_alloc(ptr_instance, sizeof(VkIcdSurfaceIOS), VK_SYSTEM_ALLOCATION_SCOPE_OBJECT);
     if (pIcdSurface == NULL) {
         return VK_ERROR_OUT_OF_HOST_MEMORY;
     }

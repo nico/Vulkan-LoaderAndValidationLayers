@@ -1,7 +1,7 @@
 /*
  * main.m
  *
- * Copyright (c) 2014-2017 The Brenwill Workshop Ltd. (http://www.brenwill.com)
+ * Copyright (c) 2014-2018 The Brenwill Workshop Ltd. (http://www.brenwill.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,4 @@
 
 #import <Cocoa/Cocoa.h>
 
-int main(int argc, const char * argv[]) {
-	return NSApplicationMain(argc, argv);
-}
+int main(int argc, const char* argv[]) { return NSApplicationMain(argc, argv); }

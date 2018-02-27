@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Brenwill Workshop Ltd.
+ * Copyright (C) 2016-2018 The Brenwill Workshop Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -28,27 +28,27 @@
 #include <sys/time.h>
 
 class PosixTimer {
-public:
+   public:
     double get();
     PosixTimer();
 
-protected:
+   protected:
     uint64_t _tsBase;
     double _tsPeriod;
 };
 
 class ShellMVK : public Shell {
-public:
-    ShellMVK(Game &game);
+   public:
+    ShellMVK(Game& game);
     ~ShellMVK();
 
     void run(void* view);
     void update_and_draw();
 
     void run() { run(nullptr); };
-    void quit() { }
+    void quit() {}
 
-protected:
+   protected:
     void* _view;
     PosixTimer _timer;
     double _current_time;
@@ -61,4 +61,4 @@ protected:
     VkSurfaceKHR create_surface(VkInstance instance);
 };
 
-#endif // SHELL_MVK_H
+#endif  // SHELL_MVK_H
