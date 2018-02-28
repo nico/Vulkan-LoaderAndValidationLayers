@@ -68,17 +68,17 @@ set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/staging-json/MoltenVK_i
     MACOSX_PACKAGE_LOCATION "Resources/vulkan/icd.d"
 )
 
-# Direct the MoltenVK library to the right place.
-install(FILES "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
-        DESTINATION "demos/cube.app/Contents/Frameworks"
-        COMPONENT Runtime
-)
-
-# Xcode projects need some extra help with what would be install steps.
+# Copy the MoltenVK lib into the bundle.
 if(${CMAKE_GENERATOR} MATCHES "^Xcode.*")
     add_custom_command(TARGET cube POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
             ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/cube.app/Contents/Frameworks/libMoltenVK.dylib
+        DEPENDS vulkan
+    )
+else()
+    add_custom_command(TARGET cube POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
+            ${CMAKE_CURRENT_BINARY_DIR}/cube.app/Contents/Frameworks/libMoltenVK.dylib
         DEPENDS vulkan
     )
 endif()

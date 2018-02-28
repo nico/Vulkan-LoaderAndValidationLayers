@@ -74,11 +74,17 @@ install(FILES "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
         COMPONENT Runtime
 )
 
-# Xcode projects need some extra help with what would be install steps.
+# Copy the MoltenVK lib into the bundle.
 if(${CMAKE_GENERATOR} MATCHES "^Xcode.*")
     add_custom_command(TARGET cubepp POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
             ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/cubepp.app/Contents/Frameworks/libMoltenVK.dylib
+        DEPENDS vulkan
+    )
+else()
+    add_custom_command(TARGET cubepp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
+            ${CMAKE_CURRENT_BINARY_DIR}/cubepp.app/Contents/Frameworks/libMoltenVK.dylib
         DEPENDS vulkan
     )
 endif()

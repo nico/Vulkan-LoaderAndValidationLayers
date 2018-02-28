@@ -34,6 +34,12 @@ if(${CMAKE_GENERATOR} MATCHES "^Xcode.*")
             ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/vulkaninfo.app/Contents/Frameworks/libMoltenVK.dylib
         DEPENDS vulkan
     )
+else()
+    add_custom_command(TARGET vulkaninfo-bundle POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
+            ${CMAKE_CURRENT_BINARY_DIR}/vulkaninfo.app/Contents/Frameworks/libMoltenVK.dylib
+        DEPENDS vulkan
+    )
 endif()
 
 # Fix up the library search path in the executable to find (loader) libraries in the bundle.

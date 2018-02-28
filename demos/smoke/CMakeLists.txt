@@ -162,6 +162,9 @@ if(APPLE)
         add_custom_command(TARGET smoketest POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:vulkan>"
                 ${CMAKE_CURRENT_BINARY_DIR}/../smoketest.app/Contents/MacOS/libvulkan.1.dylib
+            COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/MacOS/libMoltenVK.dylib"
+                ${CMAKE_CURRENT_BINARY_DIR}/../smoketest.app/Contents/Frameworks/libMoltenVK.dylib
+            DEPENDS vulkan
         )
     endif()
 
