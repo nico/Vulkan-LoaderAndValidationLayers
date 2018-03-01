@@ -228,7 +228,7 @@ static inline char *loader_secure_getenv(const char *name, const struct loader_i
     // variable (__libc_enable_secure) if the process is running under setuid or setgid.
     return geteuid() != getuid() || getegid() != getgid() ? NULL : loader_getenv(name, inst);
 #else
-    // Linux
+// Linux
 #ifdef HAVE_SECURE_GETENV
     (void)inst;
     return secure_getenv(name);

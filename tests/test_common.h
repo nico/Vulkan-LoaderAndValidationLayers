@@ -91,7 +91,7 @@ static inline void test_error_callback(const char *expr, const char *file, unsig
 }
 
 #if defined(__linux__) || defined(__APPLE__)
-/* Linux-specific common code: */
+    /* Linux-specific common code: */
 
 #include <pthread.h>
 
